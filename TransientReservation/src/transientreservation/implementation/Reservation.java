@@ -39,17 +39,43 @@ public class Reservation implements ReservationInterface{
     }
 
     @Override
-    public void checkin(int roomNo, short month, short day, String time) throws RemoteException {
+    public void checkin(int reservationNo) throws SQLException{
+        Statement stmt = con.createStatement();
+        String query = "select room_status, room_no from room where room_no='"+ reservationNo + "' ;";
+        ResultSet result = stmt.executeQuery(query);
         
+        if(result == null){
+            System.out.println("You haven't reserved a room yet. Reserve a room first before you can perform a check-in!");
+        }else{
+            query = "update room set room_status='occupied' where room_no=" + result.getInt("room_no");
+            if(stmt.executeUpdate(query) == 1){
+                System.out.println("You have successfully checked-in for your room reservation!");
+            }else{
+                System.out.println("Check-in process failed!");
+            }
+        }
     }
 
     @Override
-    public void checkout(int roomNo, short month, short day, String time) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void checkout(int reservationNo) throws SQLException{
+        Statement stmt = con.createStatement();
+        String query = "select room_status, room_no from room where room_no='"+ reservationNo + "' ;";
+        ResultSet result = stmt.executeQuery(query);
+        
+        if(result == null){
+            System.out.println("You haven't reserved a room yet. Reserve a room first before you can perform a check-in!");
+        }else{
+            query = "update room set room_status='vacant' where room_no=" + result.getInt("room_no");
+            if(stmt.executeUpdate(query) == 1){
+                System.out.println("You have successfully checked-out!");
+            }else{
+                System.out.println("Check-out process failed!");
+            }
+        }
     }
 
     @Override
-    public void viewVacant() throws RemoteException{
+    public void viewVacant(){
         try {
             Statement stmt = con.createStatement();
             String query = "select * from room where room_status='vacant'";
@@ -59,9 +85,9 @@ public class Reservation implements ReservationInterface{
                 System.out.println("There are currently no rooms available!");
             }else{
                 System.out.println("|-----------------------------|");
-                System.out.println("| Room No | Capacity |  Price  |");
+                System.out.println("| Room No | Capacity |  Price per day  |");
                 while(result.next()){
-                    System.out.printf("|    %-2s   |    %-2s    |  %-6f |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
+                    System.out.printf("|    %-2s   |    %-2s    |      %-6f     |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
                     System.out.println("|-----------------------------|");
                 }
             }
@@ -69,13 +95,14 @@ public class Reservation implements ReservationInterface{
         } catch (SQLException ex) {
         }
     }
-    
-    public void viewOccupiedDays(){
+/*    
+    public void viewOccupiedDays() throws SQLException{
         Statement stmt = con.createStatement();
+        String query = "select * from room "
     }
-
+*/
     @Override
-    public void viewOccupied() throws RemoteException {
+    public void viewOccupied(){
         try {
             Statement stmt = con.createStatement();
             String query = "select * from room where room_status='occupied'";
@@ -85,7 +112,7 @@ public class Reservation implements ReservationInterface{
                 System.out.println("All rooms are vacant! :-)");
             }else{
                 System.out.println("-------------------------------");
-                System.out.println("| Room No | Capacity |  Price  |");
+                System.out.println("| Room No | Capacity |  Price per day  |");
                 while(result.next()){
                     System.out.printf("|    %-2s   |    %-2s    |  %-6f |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
                     System.out.println("|-----------------------------|");

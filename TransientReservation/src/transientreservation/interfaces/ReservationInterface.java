@@ -2,6 +2,7 @@ package transientreservation.interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import transientreservation.constructors.*;
 /**
  *
@@ -9,8 +10,8 @@ import transientreservation.constructors.*;
  */
 public interface ReservationInterface extends Remote{
     public String viewTransInfo();
-    public void checkin(int roomNo, int lodgerNo, short month, short day, String time) throws RemoteException;
-    public void checkout(int roomNo, short month, short day, String time) throws RemoteException;
+    public void checkin(int reservationNo) throws RemoteException, SQLException;
+    public void checkout(int reservationNo) throws RemoteException, SQLException;
     public void viewVacant() throws RemoteException;
     public void viewOccupied() throws RemoteException;
 }
