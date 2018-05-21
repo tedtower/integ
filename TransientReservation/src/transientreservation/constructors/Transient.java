@@ -33,6 +33,5 @@ public class Transient {
     public void setLocation(String location) {
         this.location = location;
     }
-    
-         
+   
 }
