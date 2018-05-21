@@ -20,15 +20,21 @@ import transientreservation.constructors.Transient;
  */
 public class TransientInfoImpl implements TransientInfo{
     private Connection con;
+    private Transient trans;
     
     public TransientInfoImpl() throws SQLException{
+        trans = new Transient(null,null);
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
     }
 
     @Override
     public void setTransientName(String name) throws RemoteException {
-        Transient trans = new Transient();
         trans.setName(name);
+    }
+    
+    @Override
+    public void setTransientLocation(String location) throws RemoteException{
+        trans.setLocation(location);
     }
 
     @Override
@@ -51,10 +57,7 @@ public class TransientInfoImpl implements TransientInfo{
         return 0;
     }
 
-    @Override
-    public void sendNotification(String notif) throws RemoteException {
-        
-    }
+    
 
     @Override
     public int addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException {
