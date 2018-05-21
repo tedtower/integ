@@ -17,6 +17,11 @@ public class Transient {
         this.name = name;
         this.location = location;
     }
+    
+    public Transient(){
+        name = getName();
+        location = getLocation();
+    }
 
     public String getName() {
         return name;
