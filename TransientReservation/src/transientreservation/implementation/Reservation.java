@@ -16,6 +16,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -116,7 +119,7 @@ public class Reservation implements ReservationInterface{
         int numOfInsertedRows = 0;
         ResultSet result = stmt.executeQuery();
         if(!result.next()){
-            int amountPayable = computeAmount(0,"","");
+            int amountPayable = computeAmount(roomNo,checkIn,checkOut);
     
             query = "insert into reservation (applicant_name, room_no, reserve_date, check_in, check_out, no_of_lodgers, amount_payable) values (?,?,?,?,?,?,?)";
             stmt = con.prepareStatement(query);
@@ -133,8 +136,46 @@ public class Reservation implements ReservationInterface{
         return numOfInsertedRows;
     }
     
-    public int computeAmount(int roomNo, String checkIn, String checkOut){
-        return 0;
+    public int computeAmount(int roomNumber, String checkIn, String checkOut) throws SQLException {
+        String queryPrice = "SELECT price FROM room where roomno = ?";
+        PreparedStatement query = con.prepareStatement(queryPrice);
+        query.setInt(1, roomNumber);
+        ResultSet result = query.executeQuery();
+        
+        int total=0;
+        if(!result.next()) {
+            System.out.println("Room number does not exist!");
+        } else {
+            
+            //Get The Value Of The Queried Integer
+            int roomPrice = result.getInt("price");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d1 = null;
+            Date d2 = null;
+            try{
+                d1 = format.parse(checkIn);
+                d2 = format.parse(checkOut);
+
+                long diff = d2.getTime() - d1.getTime();
+
+                long diffSeconds = diff/1000%60;
+                long diffMinutes = diff/(60*1000)%60;
+                long diffHours = diff/(60*60*1000)%24;
+                long diffDays = diff/(24*60*60*1000);
+
+                if(diffDays < 0){
+                    total += roomPrice*diffDays;
+                }
+                if(diffHours < 0){
+                    total += roomPrice;
+                } else if(diffMinutes < 0) {
+                    total += roomPrice;
+                }
+            }catch(ParseException e){
+                System.out.println("You have entered an invalid date format.");
+            }
+        }
+        return total;
     }
 
     
