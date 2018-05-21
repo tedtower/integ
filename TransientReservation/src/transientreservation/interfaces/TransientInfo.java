@@ -15,4 +15,5 @@ public interface TransientInfo extends Remote{
     public void setTransientName(String name) throws RemoteException;
     public void setRoomCapacity(int capacity) throws RemoteException, SQLException;
     public void sendNotification(String notif) throws RemoteException;
+    public void addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException;
 }

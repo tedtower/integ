@@ -34,12 +34,17 @@ public class TransientInfoImpl implements TransientInfo{
     }
 
     @Override
-    public void setRoomCapacity(int capacity) throws RemoteException {
+    public void setRoomCapacity(int capacity) throws RemoteException, SQLException {
         
     }
 
     @Override
     public void sendNotification(String notif) throws RemoteException {
+        
+    }
+
+    @Override
+    public void addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException {
         
     }
 }
