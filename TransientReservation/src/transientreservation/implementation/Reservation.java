@@ -16,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import transientreservation.constructors.Room;
 /**
  *
  * @author HP
@@ -24,18 +23,8 @@ import transientreservation.constructors.Room;
 public class Reservation implements ReservationInterface{
     private Connection con;
     
-    public Reservation(){
-        try{
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
-        }catch(SQLException ex){
-            System.out.println("Encountered a problem connection to the database!");
-            System.exit(0);
-        }
-    }
-
-    @Override
-    public String viewTransInfo() {
-        return "";
+    public Reservation() throws SQLException{
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
     }
 
     @Override
@@ -57,7 +46,7 @@ public class Reservation implements ReservationInterface{
     }
 
     @Override
-    public void checkout(int reservationNo) throws SQLException{
+    public void checkout(int reservationNo) throws RemoteException, SQLException{
         Statement stmt = con.createStatement();
         String query = "select room_status, room_no from room where room_no='"+ reservationNo + "' ;";
         ResultSet result = stmt.executeQuery(query);
@@ -75,24 +64,21 @@ public class Reservation implements ReservationInterface{
     }
 
     @Override
-    public void viewVacant(){
-        try {
-            Statement stmt = con.createStatement();
-            String query = "select * from room where room_status='vacant'";
-            ResultSet result = stmt.executeQuery(query);
-            
-            if(result == null){
-                System.out.println("There are currently no rooms available!");
-            }else{
+    public void viewVacant() throws RemoteException, SQLException{
+   
+        Statement stmt = con.createStatement();
+        String query = "select * from room where room_status='vacant'";
+        ResultSet result = stmt.executeQuery(query);
+
+        if(result == null){
+            System.out.println("There are currently no rooms available!");
+        }else{
+            System.out.println("|-----------------------------|");
+            System.out.println("| Room No | Capacity |  Price per day  |");
+            while(result.next()){
+                System.out.printf("|    %-2s   |    %-2s    |      %-6f     |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
                 System.out.println("|-----------------------------|");
-                System.out.println("| Room No | Capacity |  Price per day  |");
-                while(result.next()){
-                    System.out.printf("|    %-2s   |    %-2s    |      %-6f     |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
-                    System.out.println("|-----------------------------|");
-                }
             }
-            
-        } catch (SQLException ex) {
         }
     }
 /*    
@@ -102,24 +88,20 @@ public class Reservation implements ReservationInterface{
     }
 */
     @Override
-    public void viewOccupied(){
-        try {
-            Statement stmt = con.createStatement();
-            String query = "select * from room where room_status='occupied'";
-            ResultSet result = stmt.executeQuery(query);
-            
-            if(result == null){
-                System.out.println("All rooms are vacant! :-)");
-            }else{
-                System.out.println("-------------------------------");
-                System.out.println("| Room No | Capacity |  Price per day  |");
-                while(result.next()){
-                    System.out.printf("|    %-2s   |    %-2s    |  %-6f |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
-                    System.out.println("|-----------------------------|");
-                }
+    public void viewOccupied()throws RemoteException, SQLException{
+        Statement stmt = con.createStatement();
+        String query = "select * from room where room_status='occupied'";
+        ResultSet result = stmt.executeQuery(query);
+
+        if(result == null){
+            System.out.println("All rooms are vacant! :-)");
+        }else{
+            System.out.println("-------------------------------");
+            System.out.println("| Room No | Capacity |  Price per day  |");
+            while(result.next()){
+                System.out.printf("|    %-2s   |    %-2s    |  %-6f |", result.getInt("room_no"), result.getInt("capacity"), result.getDouble("price"));
+                System.out.println("|-----------------------------|");
             }
-        } catch (SQLException ex) {
-            
         }
     }
 

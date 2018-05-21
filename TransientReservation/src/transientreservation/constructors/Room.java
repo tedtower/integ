@@ -21,6 +21,13 @@ public class Room {
         this.status = status;
         this.price = price;
     }
+    
+    public Room(){
+        roomNo = 0;
+        capacity = 0;
+        status = "vacant";
+        price = 0.00;
+    }
 
     public void setRoomNo(int roomNo) {
         this.roomNo = roomNo;
