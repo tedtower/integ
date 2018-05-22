@@ -18,7 +18,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import transientreservation.constructors.Reservation;
 
 /**
  *
@@ -54,6 +56,9 @@ public class Tenant implements TenantInterface{
             }else{
                 query = "update room set room_status='occupied' where room_no=" + result.getInt("room_no");
                 numOfAffectedRows = stmt.executeUpdate(query);
+                String checkIn = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+                query = "update reservation set check_in='"+checkIn+"' where reservation where reservation_no='"+reservationNo+"'";
+                numOfAffectedRows += stmt.executeUpdate(query);
             }
         }
         return numOfAffectedRows;
@@ -70,6 +75,9 @@ public class Tenant implements TenantInterface{
         }else{
             query = "update room set room_status='vacant' where room_no=" + result.getInt("room_no");
             numOfAffectedRows = stmt.executeUpdate(query);
+            String checkOut = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+            query = "update reservation set check_in='"+checkOut+"' where reservation where reservation_no='"+reservationNo+"'";
+            numOfAffectedRows += stmt.executeUpdate(query);
         }
         return numOfAffectedRows;
     }
@@ -112,11 +120,19 @@ public class Tenant implements TenantInterface{
     }
 
     @Override
-    public int makeReservation(String name, int noOfLodgers, int roomNo, String reserveDate, String checkIn, String checkOut) throws RemoteException, SQLException {
+    public int makeReservation(Reservation reservation) throws RemoteException, SQLException {
+        int roomNo = reservation.getRoomNo();
+        String name = reservation.getName();
+        String reserveDate = reservation.getDate();
+        String checkIn = reservation.getCheckIn();
+        String checkOut = reservation.getCheckOut();
+        String status = reservation.getStatus();
+        int lodgerNo = reservation.getLodgerNo();
+        
         
         String query = "select room_no, check_in, check_out from reservation where room_no=? and ((check_in between ? and ?) or (check_out between ? and ?) or (check_in <= ? and check_out >= ?) )";
         PreparedStatement stmt = con.prepareStatement(query);
-        stmt.setInt(1,roomNo);
+        stmt.setInt(1,reservation.getRoomNo());
         stmt.setString(2,checkIn);
         stmt.setString(3,checkOut);
         stmt.setString(4,checkIn);
@@ -127,7 +143,7 @@ public class Tenant implements TenantInterface{
         int numOfInsertedRows = 0;
         ResultSet result = stmt.executeQuery();
         if(!result.next()){
-            int amountPayable = computeAmount(roomNo,checkIn,checkOut);
+            int amountPayable = computeAmount(reservation.getRoomNo(),reservation.getCheckIn(),reservation.getCheckOut());
     
             query = "insert into reservation (applicant_name, room_no, reserve_date, check_in, check_out, no_of_lodgers, amount_payable) values (?,?,?,?,?,?,?)";
             stmt = con.prepareStatement(query);
@@ -136,7 +152,7 @@ public class Tenant implements TenantInterface{
             stmt.setString(3,reserveDate);
             stmt.setString(4,checkIn);
             stmt.setString(5,checkOut);
-            stmt.setInt(6,noOfLodgers);
+            stmt.setInt(6,lodgerNo);
             stmt.setInt(7,amountPayable);
             
             numOfInsertedRows = stmt.executeUpdate();

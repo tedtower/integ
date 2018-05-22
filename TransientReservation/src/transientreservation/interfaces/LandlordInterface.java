@@ -23,6 +23,7 @@ public interface LandlordInterface extends Remote{
     public void setTransientName(String name) throws RemoteException;
     public void setTransientLocation(String Location) throws RemoteException;
     public int setRoomCapacity(int roomNo, int capacity) throws RemoteException, SQLException;
+    public int setRoomPrice(int roomNo, int price) throws RemoteException, SQLException;
     public int addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException;
     public boolean addPayment(Payment payment) throws RemoteException, SQLException;
 }

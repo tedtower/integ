@@ -55,7 +55,7 @@ public class Reservation {
     public int getLodgerNo() {
         return lodgerNo;
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }

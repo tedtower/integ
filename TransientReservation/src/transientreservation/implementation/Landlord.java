@@ -65,7 +65,24 @@ public class Landlord implements LandlordInterface{
         return 0;
     }
 
-    
+    public int setRoomPrice(int roomNo, int price) throws RemoteException, SQLException {
+        String query = "select room_no from room where room_no=?;";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setInt(1, roomNo);
+        ResultSet result = stmt.executeQuery();
+        
+        if(!result.next()){
+            System.out.println("You have entered an invalid Room Number. It doesn't exist in the database!");
+        }else{
+            query = "update room set price=? where room_no=?;";
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1,price);
+            stmt.setInt(2,roomNo);
+            
+            return stmt.executeUpdate();
+        }
+        return 0;
+    }
 
     @Override
     public int addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException {
