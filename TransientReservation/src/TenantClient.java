@@ -47,18 +47,18 @@ public class TenantClient {
     public static void showMenu(TenantInterface stub){
         
         System.out.println("Welcome Tenant!");
-        
-        System.out.println("Menu");
-        System.out.println("<1>     View vacant rooms");
-        System.out.println("<2>     View occupied rooms");
-        System.out.println("<3>     Make a reservation");
-        System.out.println("<4>     Check-in a reservation");
-        System.out.println("<5>     Check-out a reservation");
-        System.out.println("<6>     Close the application");
-        
-        System.out.println("If you want to pay for your reservation. Please contact the landlord/landlady of the transient house.");
         int choice = 0;
         while(choice != 6){
+            System.out.println("Menu");
+            System.out.println("<1>     View vacant rooms");
+            System.out.println("<2>     View occupied rooms");
+            System.out.println("<3>     Make a reservation");
+            System.out.println("<4>     Check-in a reservation");
+            System.out.println("<5>     Check-out a reservation");
+            System.out.println("<6>     Close the application");
+
+            System.out.println("If you want to pay for your reservation. Please contact the landlord/landlady of the transient house.");
+
             choice = choose();
             switch(choice){
                 case 1:  try{
