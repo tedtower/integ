@@ -7,6 +7,7 @@ package transientreservation.interfaces;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import transientreservation.constructors.Payment;
 /**
  *
  * @author Ambo, Melissa
@@ -23,4 +24,5 @@ public interface LandlordInterface extends Remote{
     public void setTransientLocation(String Location) throws RemoteException;
     public int setRoomCapacity(int roomNo, int capacity) throws RemoteException, SQLException;
     public int addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException;
+    public boolean addPayment(Payment payment) throws RemoteException, SQLException;
 }

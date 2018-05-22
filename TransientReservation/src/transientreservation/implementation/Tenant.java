@@ -41,14 +41,20 @@ public class Tenant implements TenantInterface{
     @Override
     public int checkin(int reservationNo) throws SQLException{
         Statement stmt = con.createStatement();
-        String query = "select room_status, room_no from room where room_no='"+ reservationNo + "' ;";
+        String query = "select * from room where reservation_no='"+ reservationNo + "' ;";
         ResultSet result = stmt.executeQuery(query);
         int numOfAffectedRows = 0;
         if(!result.next()){
             System.out.println("You haven't reserved a room yet. Reserve a room first before you can perform a check-in!");
         }else{
-            query = "update room set room_status='occupied' where room_no=" + result.getInt("room_no");
-            numOfAffectedRows = stmt.executeUpdate(query);
+            query = "select * from reservation where reservation_no="+ reservationNo +" and pay_status='paid';";
+            stmt.executeQuery(query);
+            if(!result.next()){
+                System.out.println("You have not paid your reservation yet. Please pay before checkin in!");
+            }else{
+                query = "update room set room_status='occupied' where room_no=" + result.getInt("room_no");
+                numOfAffectedRows = stmt.executeUpdate(query);
+            }
         }
         return numOfAffectedRows;
     }
@@ -86,12 +92,7 @@ public class Tenant implements TenantInterface{
             }
         }
     }
-/*    
-    public void viewOccupiedDays() throws SQLException{
-        Statement stmt = con.createStatement();
-        String query = "select * from room "
-    }
-*/
+
     @Override
     public void viewOccupied()throws RemoteException, SQLException{
         Statement stmt = con.createStatement();

@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import transientreservation.constructors.Payment;
 import transientreservation.constructors.Transient;
 /**
  *
@@ -85,4 +86,32 @@ public class Landlord implements LandlordInterface{
         }
         return 0;
     }
+
+    @Override
+    public boolean addPayment(Payment payment) throws SQLException{
+        String query = "select * from payment where reservation_no=?";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setInt(1,payment.getReservationNo());
+        boolean success = false;
+        
+        ResultSet result = stmt.executeQuery();
+        if(!result.next()){
+            return success;
+        }
+        query = "insert into payment (reservation_no, payment_date, amount) values (?,?,?);";
+        String updateQuery = "update reservation set pay_status='paid' where reservation_no=?;";
+        PreparedStatement stmt1 = con.prepareStatement(updateQuery);
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, payment.getReservationNo());
+        stmt.setString(2, payment.getDate());
+        stmt.setInt(3, payment.getAmount());
+        
+        stmt1.setInt(1,payment.getReservationNo());
+        if(stmt.executeUpdate() > 0 && stmt1.executeUpdate() > 0){
+            success = true;
+        }
+        return success;  
+    }
+    
+    
 }
