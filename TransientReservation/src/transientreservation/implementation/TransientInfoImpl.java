@@ -6,7 +6,7 @@
 package transientreservation.implementation;
 
 import java.rmi.RemoteException;
-import transientreservation.interfaces.TransientInfo;
+import transientreservation.interfaces.LandlordInterface;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -25,7 +25,7 @@ import transientreservation.constructors.Transient;
  * @author Ramos, Tatum Eiffel Dodge
  * @author Solomon, Jessa Lyn
  */
-public class TransientInfoImpl implements TransientInfo{
+public class TransientInfoImpl implements LandlordInterface{
     private final Connection con;
     private Transient trans;
     

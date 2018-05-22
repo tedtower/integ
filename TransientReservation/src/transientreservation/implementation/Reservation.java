@@ -6,7 +6,7 @@
 package transientreservation.implementation;
 
 
-import transientreservation.interfaces.ReservationInterface;
+import transientreservation.interfaces.TenantInterface;
 import transientreservation.constructors.Room;
 
 import java.rmi.RemoteException;
@@ -31,7 +31,7 @@ import java.util.Date;
  * @author Ramos, Tatum Eiffel Dodge
  * @author Solomon, Jessa Lyn
  */
-public class Reservation implements ReservationInterface{
+public class Reservation implements TenantInterface{
     private final Connection con;
     
     public Reservation() throws SQLException{
