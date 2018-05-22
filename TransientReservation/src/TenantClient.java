@@ -7,12 +7,8 @@ import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import transientreservation.constructors.Reservation;
 import transientreservation.interfaces.TenantInterface;
-import transientreservation.implementation.Tenant;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -52,10 +48,11 @@ public class TenantClient {
             System.out.println("Menu");
             System.out.println("<1>     View vacant rooms");
             System.out.println("<2>     View occupied rooms");
-            System.out.println("<3>     Make a reservation");
-            System.out.println("<4>     Check-in a reservation");
-            System.out.println("<5>     Check-out a reservation");
-            System.out.println("<6>     Close the application");
+            System.out.println("<3>     View days that rooms are occupied");
+            System.out.println("<4>     Make a reservation");
+            System.out.println("<5>     Check-in a reservation");
+            System.out.println("<6>     Check-out a reservation");
+            System.out.println("<7>     Close the application");
 
             System.out.println("If you want to pay for your reservation. Please contact the landlord/landlady of the transient house.");
 
@@ -78,6 +75,14 @@ public class TenantClient {
                         }
                         break;
                 case 3: try{
+                            stub.viewOccupiedDays();
+                        }catch(RemoteException ex){
+                            System.out.println("The registry may not be running.");
+                        } catch (SQLException ex) {
+                            System.out.println("Can' connect to the database.");
+                        }
+                        break;
+                case 4: try{
                             performReservation(stub);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
@@ -85,7 +90,7 @@ public class TenantClient {
                             System.out.println("Can't connect to the database.");
                         }
                         break;
-                case 4: try{
+                case 5: try{
                             performCheckIn(stub);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
@@ -93,7 +98,7 @@ public class TenantClient {
                             System.out.println("Can't connect to the database.");
                         }
                         break;
-                case 5: try{
+                case 6: try{
                             performCheckOut(stub);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
@@ -101,7 +106,7 @@ public class TenantClient {
                             System.out.println("Can't connect to the database.");
                         }
                         break;
-                case 6: System.exit(0);
+                case 7: System.exit(0);
             }
         }
         

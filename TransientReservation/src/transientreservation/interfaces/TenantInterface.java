@@ -20,5 +20,6 @@ public interface TenantInterface extends Remote{
     public int checkout(int reservationNo) throws RemoteException, SQLException;
     public void viewVacant() throws RemoteException, SQLException;
     public void viewOccupied() throws RemoteException, SQLException;
+    public void viewOccupiedDays()throws RemoteException, SQLException;
     public int makeReservation(Reservation reservation) throws RemoteException, SQLException;
 }

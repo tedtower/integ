@@ -100,6 +100,27 @@ public class Tenant implements TenantInterface{
             }
         }
     }
+    
+    @Override
+    public void viewOccupiedDays()throws RemoteException, SQLException{
+        String date = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        String query = "select room_no, check_in, check_out from reservation where check_in > ? or check_out > ?";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setString(1, date);
+        stmt.setString(2, date);
+        ResultSet result = stmt.executeQuery();
+        
+        if(!result.next()){
+            System.out.println("All rooms are vacant! :-)");
+        }else{
+            System.out.println("|-------------------------------------------------------|");
+            System.out.printf("| Room No |       Check-In       |       Check-Out      |");
+            while(result.next()){
+                System.out.printf("|    %-2s   | %-20s | %-20s |", result.getInt("room_no"), result.getInt("check_in"), result.getDouble("check_out"));
+                System.out.println("|-------------------------------------------------------|");
+            }
+        }
+    }
 
     @Override
     public void viewOccupied()throws RemoteException, SQLException{
