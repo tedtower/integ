@@ -22,10 +22,17 @@ import java.util.Date;
 
 /**
  *
- * @author HP
+ * @author Ambo, Melissa
+ * @author Calines, Carla
+ * @author Catayao, Roxanne
+ * @author Domaoa, Jeane Cris
+ * @author Marquez, Art Lester
+ * @author Olivas, Marvin
+ * @author Ramos, Tatum Eiffel Dodge
+ * @author Solomon, Jessa Lyn
  */
 public class Reservation implements ReservationInterface{
-    private Connection con;
+    private final Connection con;
     
     public Reservation() throws SQLException{
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");

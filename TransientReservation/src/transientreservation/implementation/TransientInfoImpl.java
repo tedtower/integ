@@ -16,10 +16,17 @@ import java.sql.Statement;
 import transientreservation.constructors.Transient;
 /**
  *
- * @author HP
+ * @author Ambo, Melissa
+ * @author Calines, Carla
+ * @author Catayao, Roxanne
+ * @author Domaoa, Jeane Cris
+ * @author Marquez, Art Lester
+ * @author Olivas, Marvin
+ * @author Ramos, Tatum Eiffel Dodge
+ * @author Solomon, Jessa Lyn
  */
 public class TransientInfoImpl implements TransientInfo{
-    private Connection con;
+    private final Connection con;
     private Transient trans;
     
     public TransientInfoImpl() throws SQLException{
