@@ -25,11 +25,11 @@ import transientreservation.constructors.Transient;
  * @author Ramos, Tatum Eiffel Dodge
  * @author Solomon, Jessa Lyn
  */
-public class TransientInfoImpl implements LandlordInterface{
+public class Landlord implements LandlordInterface{
     private final Connection con;
     private Transient trans;
     
-    public TransientInfoImpl() throws SQLException{
+    public Landlord() throws SQLException{
         trans = new Transient(null,null);
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
     }

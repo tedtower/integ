@@ -31,10 +31,10 @@ import java.util.Date;
  * @author Ramos, Tatum Eiffel Dodge
  * @author Solomon, Jessa Lyn
  */
-public class Reservation implements TenantInterface{
+public class Tenant implements TenantInterface{
     private final Connection con;
     
-    public Reservation() throws SQLException{
+    public Tenant() throws SQLException{
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
     }
 
