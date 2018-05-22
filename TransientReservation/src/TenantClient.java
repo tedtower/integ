@@ -42,7 +42,7 @@ public class TenantClient {
     
     public static void showMenu(TenantInterface stub){
         
-        System.out.println("Welcome Tenant!");
+        System.out.println("Welcome Tenant To Aguila's Transient House!");
         int choice = 0;
         while(choice != 6){
             System.out.println("Menu");

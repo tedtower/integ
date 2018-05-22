@@ -7,7 +7,6 @@ package transientreservation.implementation;
 
 
 import transientreservation.interfaces.TenantInterface;
-import transientreservation.constructors.Room;
 
 import java.rmi.RemoteException;
 import java.sql.Connection;

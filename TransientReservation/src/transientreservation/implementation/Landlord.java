@@ -12,9 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import transientreservation.constructors.Payment;
-import transientreservation.constructors.Transient;
 /**
  *
  * @author Ambo, Melissa
@@ -28,22 +26,11 @@ import transientreservation.constructors.Transient;
  */
 public class Landlord implements LandlordInterface{
     private final Connection con;
-    private Transient trans;
     
     public Landlord() throws SQLException{
-        trans = new Transient(null,null);
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
     }
 
-    @Override
-    public void setTransientName(String name) throws RemoteException {
-        trans.setName(name);
-    }
-    
-    @Override
-    public void setTransientLocation(String location) throws RemoteException{
-        trans.setLocation(location);
-    }
 
     @Override
     public int setRoomCapacity(int roomNo, int capacity) throws RemoteException, SQLException {
@@ -65,6 +52,7 @@ public class Landlord implements LandlordInterface{
         return 0;
     }
 
+    @Override
     public int setRoomPrice(int roomNo, int price) throws RemoteException, SQLException {
         String query = "select room_no from room where room_no=?;";
         PreparedStatement stmt = con.prepareStatement(query);
