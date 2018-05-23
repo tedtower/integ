@@ -1,14 +1,17 @@
 
+import java.rmi.AccessException;
 import java.util.Scanner;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import transientreservation.constructors.Reservation;
-import transientreservation.interfaces.TenantInterface;
+import java.sql.DriverManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -29,18 +32,24 @@ import transientreservation.interfaces.TenantInterface;
  */
 public class TenantClient {
     
-    public static void main(String [] args) throws NotBoundException{
+    public static void main(String [] args){
         try {
-            Registry registry = LocateRegistry.getRegistry();
+            
+            Registry registry = LocateRegistry.getRegistry("127.0.0.1");
             TenantInterface tenantStub = (TenantInterface) registry.lookup("tenant");
-            showMenu(tenantStub);
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/transient_house","root","");
+            showMenu(con, tenantStub);
         } catch (RemoteException ex) {
             System.out.println("Registry may not be running!");
+        } catch (NotBoundException ex) {
+            System.out.println("The stub may has not been bound yet!");
+        } catch (SQLException ex) {
+            System.out.println("Cannot connect to the database!");
         }
            
     }
     
-    public static void showMenu(TenantInterface stub){
+    public static void showMenu(Connection con, TenantInterface stub){
         
         System.out.println("Welcome Tenant To Aguila's Transient House!");
         int choice = 0;
@@ -59,7 +68,7 @@ public class TenantClient {
             choice = choose();
             switch(choice){
                 case 1:  try{
-                            stub.viewVacant();
+                            stub.viewVacant(con);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
                         } catch (SQLException ex) {
@@ -67,7 +76,7 @@ public class TenantClient {
                         }
                         break;
                 case 2: try{
-                            stub.viewVacant();
+                            stub.viewVacant(con);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
                         } catch (SQLException ex) {
@@ -75,7 +84,7 @@ public class TenantClient {
                         }
                         break;
                 case 3: try{
-                            stub.viewOccupiedDays();
+                            stub.viewOccupiedDays(con);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
                         } catch (SQLException ex) {
@@ -83,7 +92,7 @@ public class TenantClient {
                         }
                         break;
                 case 4: try{
-                            performReservation(stub);
+                            performReservation(con, stub);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
                         } catch (SQLException ex) {
@@ -91,7 +100,7 @@ public class TenantClient {
                         }
                         break;
                 case 5: try{
-                            performCheckIn(stub);
+                            performCheckIn(con, stub);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
                         } catch (SQLException ex) {
@@ -99,7 +108,7 @@ public class TenantClient {
                         }
                         break;
                 case 6: try{
-                            performCheckOut(stub);
+                            performCheckOut(con, stub);
                         }catch(RemoteException ex){
                             System.out.println("The registry may not be running.");
                         } catch (SQLException ex) {
@@ -127,7 +136,7 @@ public class TenantClient {
         return choice;
     }
     
-    public static void performReservation(TenantInterface stub) throws RemoteException, SQLException{
+    public static void performReservation(Connection con, TenantInterface stub) throws RemoteException, SQLException{
         Reservation reservation = null;
         SimpleDateFormat fmt = new SimpleDateFormat();
         
@@ -179,21 +188,21 @@ public class TenantClient {
         
         date = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         reservation = new Reservation(name,roomNo,date,checkIn,checkOut,"unpaid",lodgerNo);
-        stub.makeReservation(reservation);
+        stub.makeReservation(con, reservation);
     }
     
-    public static void performCheckIn(TenantInterface stub) throws RemoteException, SQLException{
+    public static void performCheckIn(Connection con, TenantInterface stub) throws RemoteException, SQLException{
         Scanner kbd = new Scanner(System.in);
         System.out.print("Reservation Number: ");
         int reservationNo = Integer.parseInt(kbd.nextLine());
-        stub.checkin(reservationNo);  
+        stub.checkin(con, reservationNo);  
     }
     
-    public static void performCheckOut(TenantInterface stub) throws RemoteException, SQLException{
+    public static void performCheckOut(Connection con, TenantInterface stub) throws RemoteException, SQLException{
         Scanner kbd = new Scanner(System.in);
         System.out.print("Reservation Number: ");
         int reservationNo = Integer.parseInt(kbd.nextLine());
-        stub.checkout(reservationNo);  
+        stub.checkout(con, reservationNo);  
     }
             
 }

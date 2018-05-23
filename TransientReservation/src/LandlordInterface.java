@@ -1,4 +1,4 @@
-package transientreservation.interfaces;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,8 +6,8 @@ package transientreservation.interfaces;
  */
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.Connection;
 import java.sql.SQLException;
-import transientreservation.constructors.Payment;
 /**
  *
  * @author Ambo, Melissa
@@ -20,8 +20,8 @@ import transientreservation.constructors.Payment;
  * @author Solomon, Jessa Lyn
  */
 public interface LandlordInterface extends Remote{
-    public int setRoomCapacity(int roomNo, int capacity) throws RemoteException, SQLException;
-    public int setRoomPrice(int roomNo, int price) throws RemoteException, SQLException;
-    public int addRoom(int roomNo, int capacity, int price) throws RemoteException, SQLException;
-    public boolean addPayment(Payment payment) throws RemoteException, SQLException;
+    public int setRoomCapacity(Connection con, int roomNo, int capacity) throws RemoteException, SQLException;
+    public int setRoomPrice(Connection con,int roomNo, int price) throws RemoteException, SQLException;
+    public int addRoom(Connection con,int roomNo, int capacity, int price) throws RemoteException, SQLException;
+    public boolean addPayment(Connection con,Payment payment) throws RemoteException, SQLException;
 }

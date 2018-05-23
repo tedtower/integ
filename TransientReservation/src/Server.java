@@ -3,12 +3,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
-import transientreservation.implementation.Landlord;
-import transientreservation.implementation.Tenant;
-import transientreservation.interfaces.LandlordInterface;
-import transientreservation.interfaces.TenantInterface;
-
 /**
  *
  * @author Ambo, Melissa
@@ -25,20 +19,13 @@ public class Server{
         try {
             Landlord landlord = new Landlord();
             Tenant tenant = new Tenant();
-            LandlordInterface landlordStub;
-            landlordStub = (LandlordInterface) UnicastRemoteObject.exportObject(landlord, 0);
+            LandlordInterface landlordStub = (LandlordInterface) UnicastRemoteObject.exportObject(landlord, 0);
             TenantInterface tenantStub = (TenantInterface) UnicastRemoteObject.exportObject(tenant,0);
-
-            Registry registry = LocateRegistry.getRegistry("127.0.0.1");
+            Registry registry = LocateRegistry.getRegistry();
             registry.rebind("landlord", landlordStub);
             registry.rebind("tenant", tenantStub);
-        } catch (SQLException ex) {
-            System.out.println("Can't connect to the database!");
         } catch (RemoteException ex) {
-            System.out.println("The registry is not yet running!");
+            ex.printStackTrace();
         }
-
-        
     }
-
 }
