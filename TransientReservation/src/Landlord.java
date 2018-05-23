@@ -4,10 +4,8 @@
  * and open the template in the editor.
  */
 
-
 import java.rmi.RemoteException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +21,6 @@ import java.sql.SQLException;
  * @author Solomon, Jessa Lyn
  */
 public class Landlord implements LandlordInterface{
-
 
     @Override
     public int setRoomCapacity(Connection con, int roomNo, int capacity) throws RemoteException, SQLException {

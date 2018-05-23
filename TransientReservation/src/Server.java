@@ -21,7 +21,7 @@ public class Server{
             Tenant tenant = new Tenant();
             LandlordInterface landlordStub = (LandlordInterface) UnicastRemoteObject.exportObject(landlord, 0);
             TenantInterface tenantStub = (TenantInterface) UnicastRemoteObject.exportObject(tenant,0);
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.getRegistry(1099);
             registry.rebind("landlord", landlordStub);
             registry.rebind("tenant", tenantStub);
         } catch (RemoteException ex) {
